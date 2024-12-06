@@ -115,7 +115,6 @@ public class CourseRegistrationSystem {
         } catch (SQLException e) {
             System.err.println("Error retrieving student ID: " + e.getMessage());
         }
-        // If username or password is incorrect, return -1
         return -1;
     }
     

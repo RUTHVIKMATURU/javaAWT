@@ -8,10 +8,8 @@ public class CourseRegistrationAppAWT extends Frame {
         setTitle("Course Registration System");
         setSize(500, 700);
         setLayout(new GridLayout(3, 1));
-
-        // Apply font and background style
         Font font = new Font("Arial", Font.BOLD, 24);
-        setBackground(Color.LIGHT_GRAY); // Set background color
+        setBackground(Color.LIGHT_GRAY);
 
         Button studentLoginButton = new Button("Student Login");
         studentLoginButton.setFont(font);
@@ -60,19 +58,21 @@ class StudentLoginWindowAWT extends Frame {
         setLayout(new GridLayout(3, 2));
 
         // Apply font and color styles
-        Font labelFont = new Font("Arial", Font.PLAIN, 18);
+        Font labelFont = new Font("Arial", Font.PLAIN, 24);
         setBackground(Color.WHITE); 
 
         Label usernameLabel = new Label("Username:");
         usernameLabel.setFont(labelFont);
         TextField usernameField = new TextField();
+        usernameField.setFont(labelFont);
         Label passwordLabel = new Label("Password:");
         passwordLabel.setFont(labelFont);
         TextField passwordField = new TextField();
         passwordField.setEchoChar('*');
+        passwordField.setFont(labelFont);
         Button loginButton = new Button("Login");
         loginButton.setFont(labelFont);
-        loginButton.setBackground(new Color(50, 205, 50)); // Green color
+        loginButton.setBackground(new Color(50, 205, 50));
         loginButton.setForeground(Color.WHITE);
 
         loginButton.addActionListener(e -> {
@@ -119,9 +119,9 @@ class StudentDashboardWindowAWT extends Frame {
     public StudentDashboardWindowAWT(String username) {
         setTitle("Student Dashboard");
         setSize(400, 300);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Use FlowLayout for vertical arrangement
+        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
 
-        Font buttonFont = new Font("Arial", Font.PLAIN, 18);
+        Font buttonFont = new Font("Arial", Font.PLAIN, 24);
         Button viewCoursesButton = new Button("View All Courses");
         viewCoursesButton.setFont(buttonFont);
         viewCoursesButton.setBackground(new Color(70, 130, 180));
@@ -173,57 +173,68 @@ class StudentDashboardWindowAWT extends Frame {
     }
 
     private void showMessageDialog(String message) {
-        Frame dialog = new Frame();
-        dialog.setSize(300, 00);
-        dialog.setLayout(new FlowLayout());
-        dialog.add(new Label(message));
-        Button close = new Button("Close");
-        close.addActionListener(e -> dialog.dispose());
-        dialog.add(close);
+        Dialog dialog = new Dialog(this, "Message", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(300, 200);
+        TextArea textArea = new TextArea(message);
+        textArea.setFont(new Font("Arial",Font.PLAIN,24));
+        textArea.setEditable(false);
+        dialog.add(textArea, BorderLayout.CENTER);
+
+        Button closeButton = new Button("Close");
+        closeButton.addActionListener(e -> dialog.dispose());
+        Panel buttonPanel = new Panel();
+        buttonPanel.add(closeButton);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
         dialog.setVisible(true);
     }
 
     private String promptInput(String message) {
-        Frame dialog = new Frame();
-        dialog.setSize(300, 150);
+        Dialog dialog = new Dialog(this, "Input", true);
         dialog.setLayout(new FlowLayout());
-        dialog.add(new Label(message));
+        dialog.setSize(300, 150);
+
+        Label label = new Label(message);
         TextField inputField = new TextField(20);
+        Button submitButton = new Button("Submit");
+
+        submitButton.addActionListener(e -> dialog.dispose());
+
+        dialog.add(label);
         dialog.add(inputField);
-        Button submit = new Button("Submit");
-        submit.addActionListener(e -> dialog.dispose());
-        dialog.add(submit);
+        dialog.add(submitButton);
+
         dialog.setVisible(true);
-
-        while (dialog.isVisible()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {
-            }
-        }
-
         return inputField.getText();
     }
 }
-
 
 class StudentRegistrationWindowAWT extends Frame {
     public StudentRegistrationWindowAWT() {
         setTitle("Student Registration");
         setSize(400, 300);
         setLayout(new GridLayout(5, 2));
-
+        Font f = new Font("Arial",Font.PLAIN,24);
         Label usernameLabel = new Label("Username:");
+        usernameLabel.setFont(f);
         TextField usernameField = new TextField();
+        usernameField.setFont(f);
         Label passwordLabel = new Label("Password:");
+        passwordLabel.setFont(f);
         TextField passwordField = new TextField();
+        passwordField.setFont(f);
         passwordField.setEchoChar('*');
         Label fullNameLabel = new Label("Full Name:");
+        fullNameLabel.setFont(f);
         TextField fullNameField = new TextField();
+        fullNameField.setFont(f);
         Label emailLabel = new Label("Email:");
+        emailLabel.setFont(f);
         TextField emailField = new TextField();
+        emailField.setFont(f);
         Button registerButton = new Button("Register");
-
+        registerButton.setFont(f);
         registerButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
@@ -268,20 +279,30 @@ class StudentRegistrationWindowAWT extends Frame {
 class AdminLoginWindowAWT extends Frame {
     public AdminLoginWindowAWT() {
         setTitle("Admin Login");
-        setSize(400, 200);
+        setSize(400, 250);
         setLayout(new GridLayout(3, 2));
+        setBackground(Color.WHITE);
 
+        Font labelFont = new Font("Arial", Font.PLAIN, 18);
         Label usernameLabel = new Label("Admin Username:");
+        usernameLabel.setFont(labelFont);
         TextField usernameField = new TextField();
+        usernameField.setFont(labelFont);
+
         Label passwordLabel = new Label("Password:");
+        passwordLabel.setFont(labelFont);
         TextField passwordField = new TextField();
         passwordField.setEchoChar('*');
+        passwordField.setFont(labelFont);
+
         Button loginButton = new Button("Login");
+        loginButton.setFont(new Font("Arial", Font.BOLD, 18));
+        loginButton.setBackground(new Color(70, 130, 180)); // Blue background
+        loginButton.setForeground(Color.WHITE); // White text color
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            // Replace with real admin authentication logic
             if ("admin".equals(username) && "password".equals(password)) {
                 dispose();
                 new AdminDashboardWindowAWT();
@@ -307,13 +328,13 @@ class AdminLoginWindowAWT extends Frame {
     }
 
     private void showMessageDialog(String message) {
-        Frame dialog = new Frame();
-        dialog.setSize(300, 100);
+        Dialog dialog = new Dialog(this, "Error", true);
+        dialog.setSize(300, 150);
         dialog.setLayout(new FlowLayout());
         dialog.add(new Label(message));
-        Button close = new Button("Close");
-        close.addActionListener(e -> dialog.dispose());
-        dialog.add(close);
+        Button closeButton = new Button("Close");
+        closeButton.addActionListener(e -> dialog.dispose());
+        dialog.add(closeButton);
         dialog.setVisible(true);
     }
 }
@@ -321,33 +342,43 @@ class AdminDashboardWindowAWT extends Frame {
     public AdminDashboardWindowAWT() {
         setTitle("Admin Dashboard");
         setSize(400, 300);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Use FlowLayout for vertical arrangement
+        setLayout(new GridLayout(3, 1));
+        setBackground(Color.LIGHT_GRAY);
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 18);
 
         Button viewCoursesButton = new Button("View All Courses");
-        Button addCourseButton = new Button("Add New Course");
-
+        viewCoursesButton.setFont(buttonFont);
+        viewCoursesButton.setBackground(new Color(70, 130, 180)); // Blue background
+        viewCoursesButton.setForeground(Color.WHITE); // White text
         viewCoursesButton.addActionListener(e -> {
+            // Logic to view courses
             List<String> courses = CourseRegistrationSystem.getAllCourses();
-            if (courses.isEmpty()) {
-                showMessageDialog("No courses available.");
-            } else {
-                showMessageDialog("Available Courses:\n" + String.join("\n", courses));
-            }
+            showMessageDialog(courses.isEmpty() ? "No courses available." : "Available Courses:\n" + String.join("\n", courses));
         });
 
+        Button addCourseButton = new Button("Add New Course");
+        addCourseButton.setFont(buttonFont);
+        addCourseButton.setBackground(new Color(50, 205, 50)); // Green background
+        addCourseButton.setForeground(Color.WHITE); // White text
         addCourseButton.addActionListener(e -> {
             String courseCode = promptInput("Enter Course Code:");
             String courseName = promptInput("Enter Course Name:");
-            if (courseCode != null && !courseCode.isEmpty() && courseName != null && !courseName.isEmpty()) {
+            if (courseCode != null && courseName != null) {
                 CourseRegistrationSystem.addCourse(courseCode, courseName);
                 showMessageDialog("Course added successfully!");
-            } else {
-                showMessageDialog("Invalid input. Please try again.");
             }
         });
 
+        Button logoutButton = new Button("Logout");
+        logoutButton.setFont(buttonFont);
+        logoutButton.setBackground(new Color(220, 20, 60)); // Red background
+        logoutButton.setForeground(Color.WHITE); // White text
+        logoutButton.addActionListener(e -> dispose());
+
         add(viewCoursesButton);
         add(addCourseButton);
+        add(logoutButton);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -360,43 +391,39 @@ class AdminDashboardWindowAWT extends Frame {
     }
 
     private void showMessageDialog(String message) {
-        Frame dialog = new Frame();
-        dialog.setSize(300, 100);
-        dialog.setLayout(new FlowLayout());
-        dialog.add(new Label(message));
-        Button close = new Button("Close");
-        close.addActionListener(e -> dialog.dispose());
-        dialog.addWindowListener(new WindowAdapter(){
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dialog.dispose();
-            }
-        });
-        dialog.add(close);
+        Dialog dialog = new Dialog(this, "Message", true);
+        dialog.setSize(300, 200);
+        dialog.setLayout(new BorderLayout());
+        TextArea textArea = new TextArea(message);
+        textArea.setFont(new Font("Arial", Font.PLAIN, 24));
+        textArea.setEditable(false);
+        dialog.add(textArea, BorderLayout.CENTER);
+
+        Button closeButton = new Button("Close");
+        closeButton.addActionListener(e -> dialog.dispose());
+        Panel buttonPanel = new Panel();
+        buttonPanel.add(closeButton);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+
         dialog.setVisible(true);
     }
 
     private String promptInput(String message) {
-        Frame dialog = new Frame();
-        dialog.setSize(300, 150);
+        Dialog dialog = new Dialog(this, "Input", true);
         dialog.setLayout(new FlowLayout());
-        dialog.add(new Label(message));
+        dialog.setSize(300, 150);
+
+        Label label = new Label(message);
         TextField inputField = new TextField(20);
+        Button submitButton = new Button("Submit");
+
+        submitButton.addActionListener(e -> dialog.dispose());
+
+        dialog.add(label);
         dialog.add(inputField);
-        Button submit = new Button("Submit");
-        submit.addActionListener(e -> dialog.dispose());
-        dialog.add(submit);
+        dialog.add(submitButton);
+
         dialog.setVisible(true);
-
-        while (dialog.isVisible()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {
-            }
-        }
-
         return inputField.getText();
     }
 }
-
-
