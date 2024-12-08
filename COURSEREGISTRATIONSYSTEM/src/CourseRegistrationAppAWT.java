@@ -13,8 +13,8 @@ public class CourseRegistrationAppAWT extends Frame {
 
         Button studentLoginButton = new Button("Student Login");
         studentLoginButton.setFont(font);
-        studentLoginButton.setBackground(new Color(70, 130, 180)); // Set button color
-        studentLoginButton.setForeground(Color.WHITE); // Set text color
+        studentLoginButton.setBackground(new Color(70, 130, 180)); 
+        studentLoginButton.setForeground(Color.WHITE); 
         studentLoginButton.setPreferredSize(new Dimension(200, 60));
         studentLoginButton.addActionListener(e -> new StudentLoginWindowAWT());
 
@@ -57,7 +57,7 @@ class StudentLoginWindowAWT extends Frame {
         setSize(400, 200);
         setLayout(new GridLayout(3, 2));
 
-        // Apply font and color styles
+    
         Font labelFont = new Font("Arial", Font.PLAIN, 24);
         setBackground(Color.WHITE); 
 
@@ -139,8 +139,10 @@ class StudentDashboardWindowAWT extends Frame {
             String courseCode = promptInput("Enter Course Code to Register:");
             if (courseCode != null && !courseCode.isEmpty()) {
                 int studentId = CourseRegistrationSystem.getStudentId(username);
-                CourseRegistrationSystem.registerCourse(studentId, courseCode);
-                showMessageDialog("Successfully registered for the course!");
+                String s= CourseRegistrationSystem.registerCourse(studentId, courseCode);
+                showMessageDialog(s);
+            }else{
+                showMessageDialog("Invalid course code");
             }
         });
 
@@ -175,7 +177,7 @@ class StudentDashboardWindowAWT extends Frame {
     private void showMessageDialog(String message) {
         Dialog dialog = new Dialog(this, "Message", true);
         dialog.setLayout(new BorderLayout());
-        dialog.setSize(300, 200);
+        dialog.setSize(300, 500);
         TextArea textArea = new TextArea(message);
         textArea.setFont(new Font("Arial",Font.PLAIN,24));
         textArea.setEditable(false);
@@ -240,8 +242,13 @@ class StudentRegistrationWindowAWT extends Frame {
             String password = passwordField.getText();
             String fullName = fullNameField.getText();
             String email = emailField.getText();
-            CourseRegistrationSystem.registerStudent(username, password, fullName, email);
-            showMessageDialog("Student registered successfully!");
+            if(CourseRegistrationSystem.getStudentId(username)==-1) {
+                CourseRegistrationSystem.registerStudent(username,password,fullName,email);
+                showMessageDialog("Student registered successfully!");
+            } else {
+                showMessageDialog("Student already registered try with other username or enter a valid username");
+            }
+            
             dispose();
         });
 
@@ -267,7 +274,7 @@ class StudentRegistrationWindowAWT extends Frame {
 
     private void showMessageDialog(String message) {
         Frame dialog = new Frame();
-        dialog.setSize(300, 100);
+        dialog.setSize(300, 200);
         dialog.setLayout(new FlowLayout());
         dialog.add(new Label(message));
         Button close = new Button("Close");
@@ -297,8 +304,8 @@ class AdminLoginWindowAWT extends Frame {
 
         Button loginButton = new Button("Login");
         loginButton.setFont(new Font("Arial", Font.BOLD, 18));
-        loginButton.setBackground(new Color(70, 130, 180)); // Blue background
-        loginButton.setForeground(Color.WHITE); // White text color
+        loginButton.setBackground(new Color(70, 130, 180));
+        loginButton.setForeground(Color.WHITE);
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
@@ -349,31 +356,37 @@ class AdminDashboardWindowAWT extends Frame {
 
         Button viewCoursesButton = new Button("View All Courses");
         viewCoursesButton.setFont(buttonFont);
-        viewCoursesButton.setBackground(new Color(70, 130, 180)); // Blue background
-        viewCoursesButton.setForeground(Color.WHITE); // White text
+        viewCoursesButton.setBackground(new Color(70, 130, 180)); 
+        viewCoursesButton.setForeground(Color.WHITE);
         viewCoursesButton.addActionListener(e -> {
-            // Logic to view courses
             List<String> courses = CourseRegistrationSystem.getAllCourses();
             showMessageDialog(courses.isEmpty() ? "No courses available." : "Available Courses:\n" + String.join("\n", courses));
         });
 
         Button addCourseButton = new Button("Add New Course");
         addCourseButton.setFont(buttonFont);
-        addCourseButton.setBackground(new Color(50, 205, 50)); // Green background
-        addCourseButton.setForeground(Color.WHITE); // White text
+        addCourseButton.setBackground(new Color(50, 205, 50));
+        addCourseButton.setForeground(Color.WHITE); 
         addCourseButton.addActionListener(e -> {
             String courseCode = promptInput("Enter Course Code:");
             String courseName = promptInput("Enter Course Name:");
             if (courseCode != null && courseName != null) {
-                CourseRegistrationSystem.addCourse(courseCode, courseName);
+            String result = CourseRegistrationSystem.addCourse(courseCode, courseName);
+            if (result.equals("-1")) {
+                showMessageDialog("Course already exists!");
+            } else if (result.equals("0")) {
                 showMessageDialog("Course added successfully!");
+            } else {
+                showMessageDialog("Error: " + result);
             }
+        }
+
         });
 
         Button logoutButton = new Button("Logout");
         logoutButton.setFont(buttonFont);
-        logoutButton.setBackground(new Color(220, 20, 60)); // Red background
-        logoutButton.setForeground(Color.WHITE); // White text
+        logoutButton.setBackground(new Color(220, 20, 60)); 
+        logoutButton.setForeground(Color.WHITE); 
         logoutButton.addActionListener(e -> dispose());
 
         add(viewCoursesButton);
